@@ -2,6 +2,10 @@ import { useState } from 'react'
 import database from '../data/data.json'
 import { Doughnut } from 'react-chartjs-2'
 import 'chart.js/auto'
+import Card from '../components/Card'
+import DataTable from '../components/DataTable'
+import StatCard from '../components/StatCard'
+import Controls from '../components/Controls'
 
 function Dashboard() {
 
@@ -32,65 +36,21 @@ function Dashboard() {
 
   return (
     <>
-      <div className="card">
-        <h2 className="title">Statistiques clés</h2>
-        <p className="muted">Vue d'ensemble rapide des indicateurs</p>
+      <Card title="Statistiques clés" subtitle="Vue d'ensemble rapide des indicateurs">
         <div className="stats-grid">
-          <div className="stat-card">
-            <h3>{database.statistiques.totalVentes}€</h3>
-            <div className="muted">Total des ventes</div>
-          </div>
-          <div className="stat-card">
-            <h3>{database.statistiques.totalDepense}€</h3>
-            <div className="muted">Total dépensé</div>
-          </div>
-          <div className="stat-card">
-            <h3>{database.statistiques.totalVentes - database.statistiques.totalDepense}€</h3>
-            <div className="muted">Bénéfice</div>
-          </div>
-          <div className="stat-card">
-            <h3>{database.statistiques.nombreClients}</h3>
-            <div className="muted">Nombre de clients</div>
-          </div>
-          <div className="stat-card">
-            <h3>{database.statistiques.nombreCommandes}</h3>
-            <div className="muted">Commandes</div>
-          </div>
-          <div className="stat-card">
-            <h3>{database.statistiques.nombreProduits}</h3>
-            <div className="muted">Produits</div>
-          </div>
+          <StatCard value={`${database.statistiques.totalVentes}€`} label="Total des ventes" />
+          <StatCard value={`${database.statistiques.totalDepense}€`} label="Total dépensé" />
+          <StatCard value={`${database.statistiques.totalVentes - database.statistiques.totalDepense}€`} label="Bénéfice" />
+          <StatCard value={database.statistiques.nombreClients} label="Nombre de clients" />
+          <StatCard value={database.statistiques.nombreCommandes} label="Commandes" />
+          <StatCard value={database.statistiques.nombreProduits} label="Produits" />
         </div>
-      </div>
+      </Card>
 
-      <div className="card">
-        <div className="controls">
-          <label>
-            Afficher
-            <input
-              type="number"
-              min={0}
-              value={rowsToShow}
-              onChange={e => setRowsToShow(Number(e.target.value) || 0)}
-              style={{ width: 80, marginLeft: 8 }}
-            />
-            entrées
-          </label>
+      <Card>
+        <Controls rowsToShow={rowsToShow} setRowsToShow={setRowsToShow} search={search} setSearch={setSearch} />
 
-          <div className="spacer" />
-
-          <label>
-            <input
-              type="search"
-              placeholder="Rechercher un produit"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              style={{ padding: '0.25rem 0.5rem' }}
-            />
-          </label>
-        </div>
-
-        <table className="data-table">
+        <DataTable>
           <thead>
             <tr>
               <th>Produit</th>
@@ -110,10 +70,10 @@ function Dashboard() {
               </tr>
             )}
           </tbody>
-        </table>
-      </div>
+        </DataTable>
+      </Card>
 
-      <div className="card">
+      <Card>
         <div className="chart-row">
           <div>
             <h3>Répartition des paiements</h3>
@@ -130,7 +90,7 @@ function Dashboard() {
             </ul>
           </div>
         </div>
-      </div>
+      </Card>
     </>
   )
 }
